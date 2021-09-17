@@ -1,18 +1,41 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	web "example.com/framework/pkg"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "这是主页")
+type signUpReq struct {
+	Email           string `json:"Email"`
+	Password        string `json:"Password"`
+	ConfirmPassword string `json:"ConfirmPassword"`
+}
+
+func SignUp(w http.ResponseWriter, r *http.Request) {
+	req := &signUpReq{}
+
+	body, err := io.ReadAll(r.Body)
+
+	if err != nil {
+		fmt.Fprintf(w, "read body failed: %v", err)
+		return
+	}
+
+	err = json.Unmarshal(body, req)
+	if err != nil {
+		fmt.Fprintf(w, "deserialized failed: %v", err)
+		return
+	}
+
+	fmt.Fprintf(w, "%d", err)
 }
 
 func main() {
 	server := web.NewSdkHttpServer("my-test-server")
-	server.Route("/", home)
+	server.Route("/signup", SignUp)
 	server.Start(":8080")
 }
