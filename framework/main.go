@@ -31,7 +31,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "%d", err)
+	fmt.Fprintf(w, `{"userId": %d}`, 123)
 }
 
 func main() {
