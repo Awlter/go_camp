@@ -31,7 +31,23 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, `{"userId": %d}`, 123)
+	ctx := &commonResponse{
+		Data: 123,
+	}
+	respJSON, err := json.Marshal(ctx)
+
+	if err != nil {
+		fmt.Fprintf(w, "deserialized failed: %v", err)
+		return
+	}
+
+	fmt.Fprintf(w, "%s", string(respJSON))
+}
+
+type commonResponse struct {
+	BizCode int         `json:"biz_code"`
+	Msg     string      `json:"msg"`
+	Data    interface{} `json:"data"`
 }
 
 func main() {
