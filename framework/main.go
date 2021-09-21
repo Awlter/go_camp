@@ -23,7 +23,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	err := ctx.ReadJSON(req)
 	if err != nil {
-		fmt.Fprintf(w, "err: %v", err)
+		ctx.BadRequestJson(err)
 		return
 	}
 
@@ -31,7 +31,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		Data: 123,
 	}
 
-	err = ctx.WriteJSON(http.StatusOK, resp)
+	err = ctx.OkJson(resp)
 	if err != nil {
 		fmt.Printf("err: %v", err)
 	}
