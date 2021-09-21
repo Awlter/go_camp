@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	web "example.com/framework/pkg"
@@ -18,23 +17,21 @@ type signUpReq struct {
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	req := &signUpReq{}
 
-	body, err := io.ReadAll(r.Body)
+	ctx := &web.Context{
+		W: w,
+		R: r,
+	}
 
+	err := ctx.ReadJSON(req)
 	if err != nil {
-		fmt.Fprintf(w, "read body failed: %v", err)
+		fmt.Fprintf(w, "err: %v", err)
 		return
 	}
 
-	err = json.Unmarshal(body, req)
-	if err != nil {
-		fmt.Fprintf(w, "deserialized failed: %v", err)
-		return
-	}
-
-	ctx := &commonResponse{
+	resp := &commonResponse{
 		Data: 123,
 	}
-	respJSON, err := json.Marshal(ctx)
+	respJSON, err := json.Marshal(resp)
 
 	if err != nil {
 		fmt.Fprintf(w, "deserialized failed: %v", err)
