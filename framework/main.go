@@ -31,7 +31,10 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		Data: 123,
 	}
 
-	ctx.WriteJSON(http.StatusOK, resp)
+	err = ctx.WriteJSON(http.StatusOK, resp)
+	if err != nil {
+		fmt.Printf("err: %v", err)
+	}
 }
 
 type commonResponse struct {
