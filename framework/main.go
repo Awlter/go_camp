@@ -39,6 +39,6 @@ type commonResponse struct {
 
 func main() {
 	server := web.NewSdkHttpServer("my-test-server")
-	server.Route("/signup", SignUp)
+	server.Route("POST", "/signup", SignUp)
 	server.Start(":8080")
 }

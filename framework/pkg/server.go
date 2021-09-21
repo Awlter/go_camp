@@ -1,28 +1,29 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 )
 
 type Server interface {
-	Route(pattern string, handlerFunc func(ctx *Context))
+	Route(method string, pattern string, handlerFunc func(ctx *Context))
 	Start(address string) error
 }
 
 type sdkHttpServer struct {
-	Name string
+	Name    string
+	handler *MapHandler
 }
 
-func (s *sdkHttpServer) Route(pattern string, handlerFunc func(ctx *Context)) {
-	http.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-		ctx := NewContext(w, r)
-
-		handlerFunc(ctx)
-	})
+func (s *sdkHttpServer) Route(method string, pattern string, handlerFunc func(ctx *Context)) {
+	fmt.Println(s.handler.handlers)
+	key := s.handler.key(method, pattern)
+	fmt.Println(key)
+	// s.handler.handlers[key] = handlerFunc
 }
 
 func (s *sdkHttpServer) Start(address string) error {
-	return http.ListenAndServe(address, nil)
+	return http.ListenAndServe(address, s.handler)
 }
 
 func NewSdkHttpServer(name string) Server {
