@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -31,14 +30,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 	resp := &commonResponse{
 		Data: 123,
 	}
-	respJSON, err := json.Marshal(resp)
 
-	if err != nil {
-		fmt.Fprintf(w, "deserialized failed: %v", err)
-		return
-	}
-
-	fmt.Fprintf(w, "%s", string(respJSON))
+	ctx.WriteJSON(http.StatusOK, resp)
 }
 
 type commonResponse struct {

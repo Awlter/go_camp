@@ -28,3 +28,17 @@ func (c *Context) ReadJSON(req interface{}) error {
 
 	return nil
 }
+
+func (c *Context) WriteJSON(code int, resp interface{}) error {
+	respJSON, err := json.Marshal(resp)
+
+	if err != nil {
+		return err
+	}
+
+	c.W.WriteHeader(code)
+
+	_, err = c.W.Write(respJSON)
+
+	return err
+}
