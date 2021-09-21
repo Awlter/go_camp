@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	web "example.com/framework/pkg"
 )
@@ -13,13 +12,8 @@ type signUpReq struct {
 	ConfirmPassword string `json:"ConfirmPassword"`
 }
 
-func SignUp(w http.ResponseWriter, r *http.Request) {
+func SignUp(ctx *web.Context) {
 	req := &signUpReq{}
-
-	ctx := &web.Context{
-		W: w,
-		R: r,
-	}
 
 	err := ctx.ReadJSON(req)
 	if err != nil {
